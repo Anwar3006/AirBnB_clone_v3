@@ -5,6 +5,7 @@ from models.amenity import Amenity
 from api.v1.views import app_views
 from flask import abort, make_response, request, jsonify
 
+
 @app_views.route('/amenities', methods=['GET'], strict_slashes=False)
 def get_amenities():
     """
@@ -15,6 +16,7 @@ def get_amenities():
         abort(404)
     return jsonify(amenities.to_dict())
 
+
 @app_views.route('/amenities/<amenity_id>', methods=['GET'], strict_slashes=False)
 def get_amenity(amenity_id):
     """
@@ -24,6 +26,7 @@ def get_amenity(amenity_id):
     if not amenity:
         abort(404)
     return jsonify(amenity.to_dict())
+
 
 @app_views.route('/amenities/<amenity_id>', methods=['DELETE'], strict_slashes=False)
 def delete_amenity(amenity_id):
@@ -37,6 +40,7 @@ def delete_amenity(amenity_id):
     storage.save()
     return make_response(jsonify({}), 200)
 
+
 @app_views.route('/amenities', methods=['POST'], strict_slashes=False)
 def create_amenity():
     """
@@ -46,7 +50,7 @@ def create_amenity():
         abort(400, description="Not a JSON")
     if 'name' not in request.json():
         abort(400, description="Missing name")
-    
+
     new_amenity = request.json()
     amenity_instance = Amenity(**new_amenity)
     amenity_instance.save()
