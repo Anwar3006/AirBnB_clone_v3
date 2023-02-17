@@ -17,6 +17,12 @@ def teardown(error):
 
 @app.errorhandler(404)
 def not_found(error):
+    """ 404 Error
+    ---
+    responses:
+      404:
+        description: a resource was not found
+    """
     return make_response(jsonify({'error': 'Not found'}), 404)
 
 if __name__ == "__main__":
