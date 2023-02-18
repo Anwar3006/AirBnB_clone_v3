@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """ Handles all default RestFul API actions for Cities """
-from models import storage
+from models import storage, classes
 from models.amenity import Amenity
 from api.v1.views import app_views
 from flask import abort, make_response, request, jsonify
@@ -37,8 +37,8 @@ def delete_amenity(amenity_id):
     amenity = storage.get('Amenity', amenity_id)
     if not amenity:
         abort(404)
-    storage.delete(amenity)
-    storage.save()
+    amenity.delete()
+    del amenity
     return make_response(jsonify({}), 200)
 
 
@@ -58,7 +58,7 @@ def create_amenity():
     return make_response(jsonify(amenity_instance.to_dict()), 201)
 
 
-@app_views.route('/amenities/<amenity_id>', methods=['GET'],
+@app_views.route('/amenities/<amenity_id>', methods=['PUT'],
                  strict_slashes=False)
 def update_amenity(amenity_id):
     """
