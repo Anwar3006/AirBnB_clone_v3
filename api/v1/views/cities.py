@@ -20,7 +20,7 @@ def get_cities(state_id):
     
     for city in cities:
         cities_list.append(city.to_dict())
-    return make_response(cities_list, 200)
+    return make_response(jsonify(cities_list), 200)
 
 
 @app_views.route('/cities/<city_id>', methods=["GET"],
@@ -60,13 +60,13 @@ def create_city(state_id):
     if not cities:
         abort(404)
 
-    if not request.json():
+    if not request.get_json():
         abort(400, description="Not a JSON")
 
-    if 'name' not in request.json():
+    if 'name' not in request.get_json():
         abort(400, description="Missing name")
 
-    city = request.json()
+    city = request.get_json()
     add_city = City(**city)
     storage.save()
     return make_response(jsonify(add_city.to_dict()), 201)
@@ -81,13 +81,13 @@ def update_city(city_id):
     if not city:
         abort(404)
 
-    if not request.json():
+    if not request.get_json():
         abort(400, description="Not a JSON")
 
-    if 'name' not in request.json():
+    if 'name' not in request.get_json():
         abort(400, description="Missing name")
 
-    add_city = request.json()
+    add_city = request.get_json()
     ignore = ["id", "state_id", "created_at", "updated_at"]
 
     for key, value in add_city.items():
