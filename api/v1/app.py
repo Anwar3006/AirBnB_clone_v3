@@ -10,10 +10,12 @@ app = Flask(__name__)
 app.register_blueprint(app_views)
 cors = CORS(app, resources={r"api/v1/*": {"origins": "*"}})
 
+
 @app.teardown_appcontext
 def teardown(error):
     """closes the storage on teardown"""
     storage.close()
+
 
 @app.errorhandler(404)
 def not_found(error):
@@ -27,10 +29,10 @@ def not_found(error):
 
 if __name__ == "__main__":
     """ Main Function """
-    host=getenv('HBNB_API_HOST')
-    port=getenv('HBNB_API_PORT')
+    host = getenv('HBNB_API_HOST')
+    port = getenv('HBNB_API_PORT')
     if not host:
-        host='0.0.0.0'
+        host = '0.0.0.0'
     if not port:
-        port='5000'
+        port = '5000'
     app.run(host=host, port=port, threaded=True)
