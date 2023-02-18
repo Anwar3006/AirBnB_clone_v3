@@ -11,7 +11,7 @@ def get_amenities():
     """
     Retrieves a list of all amenities
     """
-    all_amenities = storage.all(Amenity).values()
+    all_amenities = storage.all('Amenity').values()
     list_amenities = []
     for amenity in all_amenities:
         list_amenities.append(amenity.to_dict())
@@ -22,7 +22,7 @@ def get_amenities():
                  strict_slashes=False)
 def get_amenity(amenity_id):
     """ Retrieves an amenity """
-    amenity = storage.get(Amenity, amenity_id)
+    amenity = storage.get('Amenity', amenity_id)
     if not amenity:
         abort(404)
 
@@ -36,7 +36,7 @@ def delete_amenity(amenity_id):
     Deletes an amenity  Object
     """
 
-    amenity = storage.get(Amenity, amenity_id)
+    amenity = storage.get('Amenity', amenity_id)
 
     if not amenity:
         abort(404)
@@ -75,7 +75,7 @@ def put_amenity(amenity_id):
 
     ignore = ['id', 'created_at', 'updated_at']
 
-    amenity = storage.get(Amenity, amenity_id)
+    amenity = storage.get('Amenity', amenity_id)
 
     if not amenity:
         abort(404)
