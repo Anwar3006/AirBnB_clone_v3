@@ -20,7 +20,7 @@ def get_cities(state_id):
     
     for city in cities:
         cities_list.append(city.to_dict())
-    return make_response(jsonify(cities_list), 200)
+    return make_response(cities_list, 200)
 
 
 @app_views.route('/cities/<city_id>', methods=["GET"],

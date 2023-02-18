@@ -14,7 +14,7 @@ def get_amenities():
     amenities = storage.all(Amenity)
     if not amenities:
         abort(404)
-    return jsonify(amenities.to_dict())
+    return amenities.to_dict()
 
 
 @app_views.route('/amenities/<amenity_id>', methods=['GET'],
