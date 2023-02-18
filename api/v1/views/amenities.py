@@ -11,10 +11,11 @@ def get_amenities():
     """
     Get list of amenities
     """
-    amenities = storage.all(Amenity)
-    if not amenities:
-        abort(404)
-    return amenities.to_dict()
+    all_amenities = storage.all(Amenity).values()
+    list_amenities = []
+    for amenity in all_amenities:
+        list_amenities.append(amenity.to_dict())
+    return jsonify(list_amenities)
 
 
 @app_views.route('/amenities/<amenity_id>', methods=['GET'],
@@ -48,12 +49,12 @@ def create_amenity():
     """
     Create amenity
     """
-    if not request.json():
+    if not request.get_json():
         abort(400, description="Not a JSON")
-    if 'name' not in request.json():
+    if 'name' not in request.get_json():
         abort(400, description="Missing name")
 
-    new_amenity = request.json()
+    new_amenity = request.get_json()
     amenity_instance = Amenity(**new_amenity)
     amenity_instance.save()
     return make_response(jsonify(amenity_instance.to_dict()), 201)
@@ -68,12 +69,12 @@ def update_amenity(amenity_id):
     amenity = storage.get(Amenity, amenity_id)
     if not amenity:
         abort(404)
-    if not request.json():
+    if not request.get_json():
         abort(400, description="Not a JSON")
-    if 'name' not in request.json():
+    if 'name' not in request.get_json():
         abort(400, description="Missing name")
 
-    update = request.json()
+    update = request.get_json()
     ignore = ["id", "created_at", "updated_at"]
 
     for key, value in update.items():

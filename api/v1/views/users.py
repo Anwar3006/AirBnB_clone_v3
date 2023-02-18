@@ -11,10 +11,11 @@ def get_users():
     """
     Get a list of users
     """
-    users = storage.all(User)
-    if not users:
-        abort(404)
-    return jsonify(users.to_dict())
+    users = storage.all(User).values()
+    list_users = []
+    for user in users:
+        list_users.append(user.to_dict())
+    return jsonify(list_users)
 
 
 @app_views.route('/users/<user_id>', methods=["GET"], strict_slashes=False)
@@ -47,14 +48,14 @@ def create_user():
     """
     Create user
     """
-    if not request.json():
+    if not request.get_json():
         abort(400, description="Not a JSON")
-    if 'email' not in request.json():
+    if 'email' not in request.get_json():
         abort(400, description="Missing email")
-    if 'password' not in request.json():
+    if 'password' not in request.get_json():
         abort(400, description="Missing password")
 
-    new_user = request.json()
+    new_user = request.get_json()
     user_object = User(**new_user)
     storage.save()
     return make_response(jsonify(user_object.to_dict()), 201)
@@ -69,13 +70,13 @@ def update_user(user_id):
     if not user:
         abort(404)
     
-    if not request.json():
+    if not request.get_json():
         abort(400, description="Not a JSON")
-    if 'password' not in request.json():
+    if 'password' not in request.get_json():
         abort(400, description="Missing password")
     
     ignore = ["id", "email", "created_at", "updated_at"]
-    update = request.json()
+    update = request.get_json()
     for key, value in update.items():
         if key not in ignore:
             setattr(user, key, value)
