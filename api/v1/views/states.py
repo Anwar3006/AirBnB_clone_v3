@@ -77,9 +77,9 @@ def update_state(state_id):
     state = storage.get(State, state_id)
     if not state:
         abort(404)
-    if not request.json():
+    if not request.get_json():
         abort(400, description="Not a JSON")
 
-    state['name'] = request.json()['name']
+    state['name'] = request.get_json()['name']
     storage.save()
     return make_response(jsonify(state.to_dict()), 200)
