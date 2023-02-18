@@ -59,7 +59,7 @@ def create_state():
     if not request.json():
         abort(400, description="Not a JSON")
 
-    if not 'name' in request.json:
+    if 'name' not in request.json:
         abort(400, description="Missing name")
 
     data = request.json()
