@@ -75,11 +75,16 @@ def update_state(state_id):
     Update State by state_id
     """
     state = storage.get(State, state_id)
-    if not state:
+    if state is None:
         abort(404)
     if not request.get_json():
         abort(400, description="Not a JSON")
 
-    state['name'] = request.get_json()['name']
+    update = request.get_json()
+    ignore = ["id", "created_at", "updated_at"]
+
+    for key, value in update.items():
+        if key not in ignore:
+            setattr(state, key, value)
     storage.save()
     return make_response(jsonify(state.to_dict()), 200)
